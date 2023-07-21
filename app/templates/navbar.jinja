@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-md bg-body-tertiary mb-3">
+  <div class="container">
+    <a class="navbar-brand" href="{{ url_for('main.home') }}">Matrix Fakebook</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mb-lg-0 mx-auto">
+        {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="{{ url_for('social.profile', username=current_user.username) }}">
+          Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('social.post') }}">Post</a>
+        </li>
+        {% endif %}
+      </ul>
+      {% if current_user.is_authenticated %}
+        <strong>{{ current_user.first_name }}</strong>
+        <a href="{{ url_for('auth.logout') }}" class="mx-2">
+          <button class="btn btn-outline-success mx-1 my-0 fw-bold">Logout</button>
+        </a>
+        <form action="{{ url_for('social.user_search') }}" method="POST">
+        {{ g.search_form.hidden_tag() }}
+          <div class="d-flex my-1">
+            <div class="mx-1">{{ g.search_form.username (size=10) }}</div>
+            <div>{{ g.search_form.submit() }}</div>
+          </div>
+        </form>
+      {% else %}
+        <a href="{{ url_for('auth.sign_up') }}">
+          <button class="btn btn-outline-success mx-1 my-0 fw-bold">Sign up</button>
+        </a>
+        <a href="{{ url_for('auth.sign_in') }}">
+          <button class="btn btn-outline-success mx-1 my-0 fw-bold">Login</button>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</nav>

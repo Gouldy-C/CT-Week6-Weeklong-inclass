@@ -1,0 +1,10 @@
+{% extends 'base.jinja' %}
+{% block content %}
+    <p>Sean say's {{ instructors['sean'][0] }}</p>
+    <p>Dylan say's {{ instructors.dylan[0] }}</p>
+    {% for student in students %}
+        {% for post in students[student] %}
+            <p>{{ student.title() }} say's : {{ post.title() }}</p>
+        {% endfor %}
+    {% endfor %}
+{% endblock content %}

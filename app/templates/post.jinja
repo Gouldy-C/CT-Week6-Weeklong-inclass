@@ -1,0 +1,11 @@
+<form action="{{ url_for('social.post') }}" method="POST">
+  {{ g.post_form.hidden_tag() }}
+  <h4>Make a post here</h4>
+  <span>
+    {{ g.post_form.body (size=32) }}
+    {% for error in g.post_form.body.errors %}
+      <br><span class="err-msg">{{ error }}</span>
+    {%endfor%}
+  </span>
+  <p class="pt-2"> {{ g.post_form.submit() }} </p>
+</form>

@@ -1,6 +1,6 @@
 from . import bp as api
 from flask import request, jsonify
-from flask_jwt_extended import create_access_token, unset_jwt_cookies
+from flask_jwt_extended import create_access_token, unset_jwt_cookies, jwt_required
 from app.models import User
 
 
@@ -39,3 +39,20 @@ def logout():
     response = jsonify({ 'message' : 'Successfully logged out.'})
     unset_jwt_cookies(response)
     return response
+
+
+@api.delete('/delete-user/<username>')
+@jwt_required()
+def delete_user(username):
+    content = request.json
+    if 'password' in content:
+        password = content['password']
+    else:
+        return jsonify({'message' : 'Must inclued password in request'}),400
+    user = User.query.filter_by(username=username).first()
+    if user and user.check_password(password):
+        user.delete()
+        for post in user.posts:
+            post.delete()
+        return jsonify({'message' : 'Username: {user.username} account deleted.'}),200
+    return jsonify({'message' : 'Invalid username or password.'}),400
